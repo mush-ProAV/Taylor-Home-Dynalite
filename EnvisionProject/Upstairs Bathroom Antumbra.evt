@@ -1,0 +1,57 @@
+Startup1()
+{
+	Name="Start Task"
+	LDA #0
+	STA ~11
+}
+
+Task1()
+{
+	Name="Bathroom LED light toggle"
+	LDA ~11
+	CMP #0
+	BRZ  L001
+	CMP #1
+	BRZ  L002
+	NULL
+L001:
+	LedOnOff(0x80,0x00,0x00,0x00)				// Turn On [ 1 ] And Turn Off [ ]
+	DyNet(0x1C,0x0E,0x03,0x6B,0x00,0x00,0xFF)	// Area 14 (Upstairs Bathroom), Channel 4 (U/S Bath LEDs), Fade Channel to Preset 1 (High) with a fade of 0.00s 
+	LDA #1
+	STA ~11
+	NULL
+L002:
+	DyNet(0x1C,0x0E,0xFF,0x31,0x00,0x00,0xFF)	// Area 14 (Upstairs Bathroom), Channel 'All', Suspend occupancy detection for all presets
+	LedOnOff(0x08,0x00,0x00,0x00)				// Turn On [ ] And Turn Off [ 1 ]
+	DyNet(0x1C,0x0E,0x03,0x6B,0x03,0x00,0xFF)	// Area 14 (Upstairs Bathroom), Channel 4 (U/S Bath LEDs), Fade Channel/Area to Preset 4 (Off) with a fade of 0.00s
+	LDA #0
+	STA ~11
+	StartTask(2)								// Start the delay to turn occupancy detection back on
+	NULL
+}
+
+Task2()
+{
+	Name="Resume occupancy detection"
+	Delay(3.00)
+	DyNet(0x1C,0x0E,0xFF,0x31,0x00,0x01,0xFF)	// Area 14 (Upstairs Bathroom), Channel 'All', Resume occupancy detection for all presets
+}
+
+Task3()
+{
+	Name="Listen for LED lights on"
+	Start(0x1C,0x0E,0x03,0x6B,0x00,0x00,0xFF)	// Area 14 (Upstairs Bathroom), Channel 4 (U/S Bath LEDs), Join 0xFF - Fade Channel/Area to Preset 1 (High) with a fade of 0.00s 
+	LedOnOff(0x80,0x00,0x00,0x00)				// Turn On [ 1 ] And Turn Off [ ]
+	LDA #1
+	STA ~11
+}
+
+Task4()
+{
+	Name="Listen for LED lights off"
+	Start(0x1C,0x0E,0x03,0x6B,0x03,0x00,0xFF)	// Area 14 (Upstairs Bathroom), Channel 4 (U/S Bath LEDs), Fade Channel/Area to Preset 4 (Off)
+	LedOnOff(0x08,0x00,0x00,0x00)				// Turn On [ ] And Turn Off [ 1 ]
+	LDA #0
+	STA ~11
+}
+

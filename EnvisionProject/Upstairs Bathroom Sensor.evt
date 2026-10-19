@@ -1,0 +1,24 @@
+Startup1()
+{
+	Name="Start Task"
+}
+
+Task1()
+{
+	Name="Control Task"
+	DyNet(0x1C,0x0E,0x03,0x6B,0x00,0x00,0xFF)	// Area 14 (Upstairs Bathroom), Channel 4 (U/S Bath LEDs), Join 0xFF - Fade Channel/Area to Preset 1 (High) with a fade of 0.00s 
+	Canceltask(2)
+	Starttask(2)
+}
+
+Task2()
+{
+	Name="Bathroom"
+	Delay(120.0)
+	DyNet(0x1C,0x0E,0x01,0x6B,0x03,0x00,0xFF)	// Area 14 (Upstairs Bathroom), Channel 2 (U/S Bath Heat 1), Join 0xFF - Fade Channel/Area to Preset 4 (Off) with a fade of 0.00s 
+	DyNet(0x1C,0x0E,0x02,0x6B,0x03,0x00,0xFF)	// Area 14 (Upstairs Bathroom), Channel 3 (U/S Bath Heat 2), Join 0xFF - Fade Channel/Area to Preset 4 (Off) with a fade of 0.00s 
+	DyNet(0x1C,0x0E,0x03,0x6B,0x03,0x00,0xFF)	// Area 14 (Upstairs Bathroom), Channel 4 (U/S Bath LEDs), Join 0xFF - Fade Channel/Area to Preset 4 (Off) with a fade of 0.00s 
+	DyNet(0x1C,0x0E,0x04,0x6B,0x03,0x00,0xFF)	// Area 14 (Upstairs Bathroom), Channel 5 (U/S Bath Halogen), Join 0xFF - Fade Channel/Area to Preset 4 (Off) with a fade of 0.00s 
+	Delay(240.0)
+	Preset(A=14,P=4,F=0.00)
+}

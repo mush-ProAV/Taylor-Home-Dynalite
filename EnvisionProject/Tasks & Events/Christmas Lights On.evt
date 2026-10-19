@@ -1,0 +1,168 @@
+// Decompiled by EnvisionProject on 23-03-2015 at 12:26
+
+
+ReservedEvents=50
+//This is where the DLS table goes
+DaylightSaving
+{
+  Start(First,Sun,Oct,2:00,60)
+  Stop(First,Sun,Apr,3:00,0)
+}
+
+//This is where the SRSS table goes
+SRSS
+{
+  Jan 04:48, 19:09
+  Feb 05:16, 19:01
+  Mar 05:43, 18:32
+  Apr 06:07, 17:51
+  May 06:29, 17:15
+  Jun 06:51, 16:54
+  Jul 07:01, 16:57
+  Aug 06:48, 17:15
+  Sep 06:14, 17:37
+  Oct 05:33, 17:58
+  Nov 04:55, 18:23
+  Dec 04:37, 18:51
+}
+
+Startup1()
+{
+	Name="Start Task"
+	NULL
+}
+
+Task1()
+{
+	Name="Whole House Off"
+	Start(a=250, p=4)					// Listens for preset 4 in area 250
+	Preset=4							// Set preset to 4 (off)
+	Preset(A=2)							// Dining Room
+	Preset(A=3)							// Kitchen
+	Preset(A=4)							// Laundry
+	Preset(A=5)							// Downstairs Bathroom
+	Preset(A=6)							// Downstairs Hallway
+	Preset(A=7)							// Terrace
+	Preset(A=8)							// Front Entry
+	Preset(A=9)							// Office
+	Preset(A=10)						// Garage
+	Preset(A=11)						// Store Room (under stairs)
+	Preset(A=12)						// Stairs
+	Preset(A=13)						// Upstairs Hallway
+	Preset(A=14)						// Upstairs Bathroom
+	Preset(A=15)						// Master Bedroom
+	Preset(A=16)						// Spare Bedroom
+	Preset(A=17)						// Max & Aurelia's Bedroom
+	Preset(A=18)						// Jenny's Bedroom
+	Preset(A=19)						// Madeline's Bedroom
+	Preset(A=20)						// Christmas Lights
+	//Preset(A=21)						// Front Door Bell
+	Preset(A=22)						// Lounge Room
+	Preset(A=23)						// Backyard
+	Preset(A=24)						// Side Yard (between garage and terrace)
+	Preset(A=25)						// Driveway
+	Preset(A=26)						// Pool
+}
+
+Task2()
+{
+	Name="Good Morning"
+	PresetOffset(A=14,O=0) 				// Return Area 14 (Upstairs bathroom) to preset offset of 0
+}
+
+Task3()
+{
+	Name="Night Mode"
+	Preset(A=12,P=4)					// Turn off Stair lights
+}
+
+Event1
+{
+	Name="Door Bell On - Weekdays"
+	Enable=True
+	Days(Mon,Tue,Wed,Thu,Fri)
+	Time=07:00
+	Date(All,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+	Preset(A=21,P=1,F=0.00,J=0xFF)
+}
+Event2
+{
+	Name="Door Bell Off"
+	Enable=True
+	Days(Mon,Tue,Wed,Thu,Fri,Sat,Sun)
+	Time=21:00
+	Date(All,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+	Preset(A=21,P=4,F=0.00,J=0xFF)
+}
+Event3
+{
+	Name="Christmas Lights On"
+	Enable=True
+	Days(Mon,Tue,Wed,Thu,Fri,Sat,Sun)
+	Time=SS-00:30
+	Date(All,Jan,Dec)
+	Preset(A=20,P=1,F=0.00,J=0xFF)
+}
+Event4
+{
+	Name="Christmas Lights Off"
+	Enable=True
+	Days(Mon,Tue,Wed,Thu,Fri,Sat,Sun)
+	Time=23:00
+	Date(All,Jan,Dec)
+	Preset(A=20,P=4,F=0.00,J=0xFF)
+}
+Event5
+{
+	Name="All Stair Lights"
+	Enable=True
+	Days(Mon,Tue,Wed,Thu,Fri,Sat,Sun)
+	Time=SS-00:00
+	Date(All,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+	ChannelLevel(A=12,C=0,L=100,F=600.00,J=0xFF)
+}
+Event6
+{
+	Name="Stair Ceiling Dim"
+	Enable=True
+	Days(Mon,Tue,Wed,Thu,Fri,Sat,Sun)
+	Time=20:30
+	Date(All,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+	ChannelLevel(A=12,C=2,L=50,F=300.00,J=0xFF)
+}
+Event7
+{
+	Name="Stair Ceiling Off"
+	Enable=True
+	Days(Mon,Tue,Wed,Thu,Fri,Sat,Sun)
+	Time=22:00
+	Date(All,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+	ChannelLevel(A=12,C=2,L=0,F=300.00,J=0xFF)
+}
+Event8
+{
+	Name="Good Morning"
+	Enable=True
+	Days(Mon,Tue,Wed,Thu,Fri,Sat,Sun)
+	Time=SR+00:15
+	Date(All,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+	Task2()
+}
+Event9
+{
+	Name="Night Mode"
+	Enable=True
+	Days(Mon,Tue,Wed,Thu,Fri,Sat,Sun)
+	Time=01:00
+	Date(All,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+	Task3()
+}
+Event10
+{
+	Name="Door Bell On - Weekends"
+	Enable=True
+	Days(Sat,Sun)
+	Time=09:00
+	Date(All,Jan,Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec)
+	Preset(A=21,P=1,F=0.00,J=0xFF)
+}
